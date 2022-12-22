@@ -2,7 +2,14 @@
 const express = require('express');
 const router = express.Router();
 const Projects = require('./projects-model');
+const { validateProjectId } = require('./projects-middleware');
 
+// GET project by ID
+router.get('/:id', validateProjectId, (req, res) => {
+  res.status(200).json(req.project);
+});
+
+// GET all projects
 router.get('/', (req, res) => {
   Projects.get()
     .then((projects) => {
