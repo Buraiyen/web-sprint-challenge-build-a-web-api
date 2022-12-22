@@ -5,8 +5,29 @@ const Projects = require('./projects-model');
 const {
   validateProjectId,
   validateProjectPost,
+  validateProjectPut,
 } = require('./projects-middleware');
 
+// PUT project
+router.put(
+  '/:id',
+  validateProjectId,
+  validateProjectPost,
+  validateProjectPut,
+  (req, res) => {
+    Projects.update(req.params.id, req.body)
+      .then(() => {
+        res.status(200).json(req.body);
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: 'error when updating project',
+          error: err.message,
+          stack: err.stack,
+        });
+      });
+  }
+);
 // POST project
 router.post('/', validateProjectPost, (req, res) => {
   Projects.insert(req.body)

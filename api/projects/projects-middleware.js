@@ -1,6 +1,17 @@
 // add middlewares here related to projects
 const Projects = require('./projects-model');
 
+const validateProjectPut = async (req, res, next) => {
+  const { id } = req.params;
+  await Projects.get(id).then((project) => {
+    if (project.completed) {
+      res.status(400).json({
+        message: 'cannot modify completed project',
+      });
+    }
+    next();
+  });
+};
 const validateProjectPost = (req, res, next) => {
   const { name, description } = req.body;
   if (!name || !description) {
@@ -24,4 +35,4 @@ const validateProjectId = async (req, res, next) => {
   });
 };
 
-module.exports = { validateProjectId, validateProjectPost };
+module.exports = { validateProjectId, validateProjectPost, validateProjectPut };
