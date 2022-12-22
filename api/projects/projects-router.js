@@ -2,7 +2,25 @@
 const express = require('express');
 const router = express.Router();
 const Projects = require('./projects-model');
-const { validateProjectId } = require('./projects-middleware');
+const {
+  validateProjectId,
+  validateProjectPost,
+} = require('./projects-middleware');
+
+// POST project
+router.post('/', validateProjectPost, (req, res) => {
+  Projects.insert(req.body)
+    .then(() => {
+      res.status(200).json(req.body);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'error when creating project',
+        error: err.message,
+        stack: err.stack,
+      });
+    });
+});
 
 // GET project by ID
 router.get('/:id', validateProjectId, (req, res) => {
@@ -18,6 +36,7 @@ router.get('/', (req, res) => {
     .catch((err) => {
       res.status(500).json({
         message: 'error when retrieving projects',
+        error: err.message,
         stack: err.stack,
       });
     });
