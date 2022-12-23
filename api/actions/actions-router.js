@@ -2,7 +2,18 @@
 const express = require('express');
 const router = express.Router();
 const Actions = require('./actions-model');
-const { validateActionId, validateActionPost } = require('./actions-middlware');
+const {
+  validateActionId,
+  validateActionPost,
+  validateActionPut,
+} = require('./actions-middlware');
+
+// PUT action
+router.put('/:id', validateActionId, validateActionPut, (req, res) => {
+  Actions.update(req.params.id, req.body).then(() => {
+    res.status(200).json(req.body);
+  });
+});
 
 // POST action
 router.post('/', validateActionPost, (req, res) => {
