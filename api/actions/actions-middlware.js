@@ -1,5 +1,17 @@
 // add middlewares here related to actions
 const Actions = require('./actions-model');
+
+const validateActionPost = (req, res, next) => {
+  const { notes, description, project_id } = req.body;
+  if (!notes || !description || !project_id) {
+    res.status(400).json({
+      message: 'missing fields for POST request',
+    });
+    return;
+  }
+  next();
+};
+
 const validateActionId = async (req, res, next) => {
   const { id } = req.params;
   await Actions.get(id).then((action) => {
@@ -9,9 +21,9 @@ const validateActionId = async (req, res, next) => {
       });
       return;
     }
-    res.status(200).json(action);
+    req.action = action;
     next();
   });
 };
 
-module.exports = { validateActionId };
+module.exports = { validateActionId, validateActionPost };
