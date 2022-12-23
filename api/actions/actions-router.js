@@ -8,6 +8,15 @@ const {
   validateActionPut,
 } = require('./actions-middlware');
 
+// DELETE action
+router.delete('/:id', validateActionId, (req, res) => {
+  Actions.remove(req.params.id).then(() => {
+    res.status(200).json({
+      message: `deleted action of id ${req.params.id}`,
+    });
+  });
+});
+
 // PUT action
 router.put('/:id', validateActionId, validateActionPut, (req, res) => {
   Actions.update(req.params.id, req.body).then(() => {
