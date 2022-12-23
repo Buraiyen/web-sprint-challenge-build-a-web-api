@@ -4,6 +4,8 @@ const router = express.Router();
 const Actions = require('./actions-model');
 
 router.get('/', (req, res) => {
-  res.json({ message: 'actions!' });
+  Actions.get().then((actions) => {
+    res.status(200).json(actions);
+  });
 });
 module.exports = router;
