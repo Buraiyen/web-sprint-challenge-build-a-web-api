@@ -9,25 +9,15 @@ const {
 } = require('./projects-middleware');
 
 // PUT project
-router.put(
-  '/:id',
-  validateProjectId,
-  validateProjectPost,
-  validateProjectPut,
-  (req, res) => {
-    Projects.update(req.params.id, req.body)
-      .then(() => {
-        res.status(200).json(req.body);
-      })
-      .catch((err) => {
-        res.status(500).json({
-          message: 'error when updating project',
-          error: err.message,
-          stack: err.stack,
-        });
-      });
-  }
-);
+router.put('/:id', validateProjectId, validateProjectPut, (req, res) => {
+  Projects.update(req.params.id, req.body)
+    .then(() => {
+      res.status(200).json(req.body);
+    })
+    .catch((err) => {
+      res.status(400);
+    });
+});
 // POST project
 router.post('/', validateProjectPost, (req, res) => {
   Projects.insert(req.body)
@@ -35,11 +25,7 @@ router.post('/', validateProjectPost, (req, res) => {
       res.status(200).json(req.body);
     })
     .catch((err) => {
-      res.status(500).json({
-        message: 'error when creating project',
-        error: err.message,
-        stack: err.stack,
-      });
+      res.status(500);
     });
 });
 
@@ -55,11 +41,7 @@ router.get('/', (req, res) => {
       res.status(200).json(projects);
     })
     .catch((err) => {
-      res.status(500).json({
-        message: 'error when retrieving projects',
-        error: err.message,
-        stack: err.stack,
-      });
+      res.status(500);
     });
 });
 
