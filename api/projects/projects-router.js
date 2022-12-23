@@ -8,6 +8,27 @@ const {
   validateProjectPut,
 } = require('./projects-middleware');
 
+// GET project actions
+router.get('/:id/actions', validateProjectId, (req, res) => {
+  const { id } = req.params;
+  Projects.getProjectActions(id).then((actions) => {
+    res.status(200).json(actions);
+  });
+});
+// DELETE project
+router.delete('/:id', validateProjectId, (req, res) => {
+  const { id } = req.params;
+  Projects.remove(id)
+    .then(() => {
+      res.status(200).json({
+        message: `Deleted project with ID ${id}`,
+      });
+    })
+    .catch((err) => {
+      res.status(400);
+    });
+});
+
 // PUT project
 router.put('/:id', validateProjectId, validateProjectPut, (req, res) => {
   Projects.update(req.params.id, req.body)
@@ -18,6 +39,7 @@ router.put('/:id', validateProjectId, validateProjectPut, (req, res) => {
       res.status(400);
     });
 });
+
 // POST project
 router.post('/', validateProjectPost, (req, res) => {
   Projects.insert(req.body)

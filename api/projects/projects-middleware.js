@@ -5,28 +5,10 @@ const validateProjectPut = async (req, res, next) => {
   const { name, description, completed } = req.body;
   if (!name || !description || completed === undefined) {
     res.status(400).json({
-      message: 'name or description is missing',
+      message: 'name, description, or completed field is missing',
     });
   }
   next();
-
-  // const { id } = req.params;
-  // await Projects.get(id)
-  //   .then((project) => {
-  //     if (project.completed) {
-  //       res.status(400).json({
-  //         message: 'cannot modify completed project',
-  //       });
-  //     }
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     res.status(404).json({
-  //       message: 'error when validating PUT',
-  //       error: err.message,
-  //       stack: err.stack,
-  //     });
-  //   });
 };
 const validateProjectPost = (req, res, next) => {
   const { name, description } = req.body;
